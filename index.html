@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字猜猜乐 🎮 - 一个简单的猜数字游戏</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-gamepad"></i> 数字猜猜乐</h1>
+            <p class="subtitle">猜出1-100之间的神秘数字！</p>
+        </header>
+
+        <main>
+            <div class="game-area">
+                <div class="game-info">
+                    <div class="score-board">
+                        <div class="score-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>分数: <span id="score">100</span></span>
+                        </div>
+                        <div class="score-item">
+                            <i class="fas fa-history"></i>
+                            <span>尝试次数: <span id="attempts">0</span></span>
+                        </div>
+                        <div class="score-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>剩余机会: <span id="remaining">10</span></span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box">
+                        <i class="fas fa-lightbulb"></i>
+                        <p id="hint">游戏开始！输入1-100之间的数字</p>
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <div class="input-group">
+                        <input type="number" id="guessInput" min="1" max="100" placeholder="输入你的猜测 (1-100)">
+                        <button id="guessBtn" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> 猜！
+                        </button>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="hintBtn" class="btn-secondary">
+                            <i class="fas fa-question-circle"></i> 提示
+                        </button>
+                        <button id="restartBtn" class="btn-secondary">
+                            <i class="fas fa-redo"></i> 重新开始
+                        </button>
+                        <button id="rulesBtn" class="btn-secondary">
+                            <i class="fas fa-book"></i> 游戏规则
+                        </button>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <h3><i class="fas fa-list-ol"></i> 猜测记录</h3>
+                    <div class="history-list" id="historyList">
+                        <!-- 猜测记录会动态添加到这里 -->
+                        <div class="empty-history">
+                            <i class="fas fa-clock"></i>
+                            <p>还没有猜测记录，开始游戏吧！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3><i class="fas fa-graduation-cap"></i> 如何玩？</h3>
+                <ol>
+                    <li>系统会随机生成一个1-100之间的数字</li>
+                    <li>在输入框中输入你的猜测</li>
+                    <li>根据提示调整你的猜测（太高/太低）</li>
+                    <li>用最少的次数猜中数字获得高分！</li>
+                    <li>你有10次机会，用完游戏结束</li>
+                </ol>
+                <div class="tip">
+                    <i class="fas fa-star"></i>
+                    <strong>高分技巧：</strong> 使用二分法策略能更快猜中！
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>🎮 游戏由 OpenClaw AI 助手开发 | 
+                <a href="https://github.com" target="_blank"><i class="fab fa-github"></i> GitHub</a> | 
+                <a href="https://vercel.com" target="_blank"><i class="fas fa-cloud"></i> Vercel</a>
+            </p>
+            <p class="copyright">© 2024 数字猜猜乐 - 一个简单的网页游戏</p>
+        </footer>
+    </div>
+
+    <!-- 游戏规则模态框 -->
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-book"></i> 游戏规则</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="rule-item">
+                    <i class="fas fa-dice"></i>
+                    <h3>游戏目标</h3>
+                    <p>猜出系统随机生成的1-100之间的数字。</p>
+                </div>
+                <div class="rule-item">
+                    <i class="fas fa-calculator"></i>
+                    <h3>分数系统</h3>
+                    <ul>
+                        <li>起始分数：100分</li>
+                        <li>每次猜测扣2分</li>
+                        <li>使用提示扣5分</li>
+                        <li>猜中数字获得剩余机会×10的奖励分</li>
+                    </ul>
+                </div>
+                <div class="rule-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3>难度等级</h3>
+                    <p>根据你的表现，游戏会动态调整难度：</p>
+                    <ul>
+                        <li>新手：10次机会</li>
+                        <li>高手：8次机会</li>
+                        <li>大师：6次机会</li>
+                    </ul>
+                </div>
+                <div class="rule-item">
+                    <i class="fas fa-trophy"></i>
+                    <h3>高分策略</h3>
+                    <p>使用二分法：每次都猜当前范围的中点值，能最快找到答案！</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏结束模态框 -->
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="gameResultTitle"></h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="result-stats" id="resultStats">
+                    <!-- 游戏结果统计会动态添加到这里 -->
+                </div>
+                <button id="playAgainBtn" class="btn-primary">
+                    <i class="fas fa-play-circle"></i> 再玩一次
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
